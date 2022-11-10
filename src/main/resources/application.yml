@@ -15,4 +15,4 @@ logging:
   level:
     root: "INFO"
     com:
-      example: "DEBUG"
+      example: "WARN"
