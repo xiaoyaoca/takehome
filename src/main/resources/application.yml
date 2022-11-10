@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: "takehome"
+
+trevorblades:
+  countries:
+    url: "https://countries.trevorblades.com/graphql"
+    countryQuery: "{ countries(filter: {code: {eq: $arg1}}) { code name continent {code name} } }"
+    continentQuery: "{ continents(filter: {code: {eq:$arg1}}) { code name countries {code name } } }"
+
+logging:
+  level:
+    root: "INFO"
+    com:
+      example: "DEBUG"
