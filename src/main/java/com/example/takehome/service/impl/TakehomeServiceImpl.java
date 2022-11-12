@@ -32,8 +32,10 @@ public class TakehomeServiceImpl implements TakehomeService {
         Map<String, CountryContinent> continents = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, Object> requestVariables = new HashMap<>();
         for (String code : codes) {
-            HttpEntity<TGGraphQLRequest> request = new HttpEntity<>(new TGGraphQLRequest(trevorbladesConfigProperties.getCountryQuery().replaceAll("\\$arg1", "\"" + code + "\"")), headers);
+            requestVariables.put("arg1", code);
+            HttpEntity<TGGraphQLRequest> request = new HttpEntity<>(new TGGraphQLRequest(trevorbladesConfigProperties.getCountryQuery(), requestVariables), headers);
             log.debug("query string: " + request.getBody().getQuery());
             TBCountryQueryResponse queryResponse = this.restTemplate.postForObject(this.trevorbladesConfigProperties.getUrl(), request, TBCountryQueryResponse.class);
             if (queryResponse != null && queryResponse.getData() != null) {
@@ -56,7 +58,8 @@ public class TakehomeServiceImpl implements TakehomeService {
         }
         List<RespContinent> respContinents = new ArrayList<>(continents.size());
         for (CountryContinent continent : continents.values()) {
-            HttpEntity<TGGraphQLRequest> request = new HttpEntity<>(new TGGraphQLRequest(trevorbladesConfigProperties.getContinentQuery().replaceAll("\\$arg1", "\"" + continent.getContinentCode() + "\"")), headers);
+            requestVariables.put("arg1", continent.getContinentCode());
+            HttpEntity<TGGraphQLRequest> request = new HttpEntity<>(new TGGraphQLRequest(trevorbladesConfigProperties.getContinentQuery(), requestVariables), headers);
             log.debug("query string: " + request.getBody().getQuery());
             TBContinentQueryResponse queryResponse = this.restTemplate.postForObject(this.trevorbladesConfigProperties.getUrl(), request, TBContinentQueryResponse.class);
             if (queryResponse != null && queryResponse.getData() != null) {
